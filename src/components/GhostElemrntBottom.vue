@@ -24,6 +24,7 @@
   position: absolute;
   top: 13px;
   left: 757px;
+  cursor: pointer;
 }
 
 .text {

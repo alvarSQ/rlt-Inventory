@@ -48,6 +48,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 17px 13px;
   width: 236px;
   height: 500px;
   gap: 20px;

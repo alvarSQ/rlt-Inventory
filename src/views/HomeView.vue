@@ -10,6 +10,7 @@ import Inventory from '@/components/Inventory.vue';
       <GhostElemrntLeft />
       <Inventory />      
       <GhostElemrntBottom />
+
     </div>
   </div>
 </template>
