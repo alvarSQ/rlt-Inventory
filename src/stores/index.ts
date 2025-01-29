@@ -23,138 +23,6 @@ export const useInventoryStore = defineStore(
         amount: 5,
         size: 'min',
       },
-      {
-        id: 4,
-        name: '',
-        amount: 0,
-        size: 'min',
-      },
-      {
-        id: 5,
-        name: '',
-        amount: 0,
-        size: 'min',
-      },
-      {
-        id: 6,
-        name: '',
-        amount: 0,
-        size: 'min',
-      },
-      {
-        id: 7,
-        name: '',
-        amount: 0,
-        size: 'min',
-      },
-      {
-        id: 8,
-        name: '',
-        amount: 0,
-        size: 'min',
-      },
-      {
-        id: 9,
-        name: '',
-        amount: 0,
-        size: 'min',
-      },
-      {
-        id: 10,
-        name: '',
-        amount: 0,
-        size: 'min',
-      },
-      {
-        id: 11,
-        name: '',
-        amount: 0,
-        size: 'min',
-      },
-      {
-        id: 12,
-        name: '',
-        amount: 0,
-        size: 'min',
-      },
-      {
-        id: 13,
-        name: '',
-        amount: 0,
-        size: 'min',
-      },
-      {
-        id: 14,
-        name: '',
-        amount: 0,
-        size: 'min',
-      },
-      {
-        id: 15,
-        name: '',
-        amount: 0,
-        size: 'min',
-      },
-      {
-        id: 16,
-        name: '',
-        amount: 0,
-        size: 'min',
-      },
-      {
-        id: 17,
-        name: '',
-        amount: 0,
-        size: 'min',
-      },
-      {
-        id: 18,
-        name: '',
-        amount: 0,
-        size: 'min',
-      },
-      {
-        id: 19,
-        name: '',
-        amount: 0,
-        size: 'min',
-      },
-      {
-        id: 20,
-        name: '',
-        amount: 0,
-        size: 'min',
-      },
-      {
-        id: 21,
-        name: '',
-        amount: 0,
-        size: 'min',
-      },
-      {
-        id: 22,
-        name: '',
-        amount: 0,
-        size: 'min',
-      },
-      {
-        id: 23,
-        name: '',
-        amount: 0,
-        size: 'min',
-      },
-      {
-        id: 24,
-        name: '',
-        amount: 0,
-        size: 'min',
-      },
-      {
-        id: 25,
-        name: '',
-        amount: 0,
-        size: 'min',
-      },
     ] as IitemsInventory[]);
 
     const getItemsInventory = computed(() => itemsInventory.value);
@@ -165,7 +33,7 @@ export const useInventoryStore = defineStore(
       });
     });
 
-    const resizeItem = (id: number) => {
+    const resizeItem = (id: number) => {      
       itemsInventory.value.forEach((e) => {
         if (e.size === 'big') {
           e.size = 'min';
@@ -178,10 +46,10 @@ export const useInventoryStore = defineStore(
     };
 
     return { getItemsInventory, bigItems, resizeItem, itemsInventory };
-  },
-  {
-    persist: {
-      pick: ['itemsInventory'],
-    },
   }
+  // {
+  //   persist: {
+  //     pick: ['itemsInventory'],
+  //   },
+  // }
 );

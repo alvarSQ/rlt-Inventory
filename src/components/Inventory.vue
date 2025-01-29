@@ -8,8 +8,6 @@ import { computed, ref } from 'vue';
 const inventoryStore = useInventoryStore();
 const { bigItems, getItemsInventory } = storeToRefs(useInventoryStore());
 
-
-
 const isModal = ref(true);
 
 const closeOpenModal = computed(() => {
@@ -18,23 +16,44 @@ const closeOpenModal = computed(() => {
 
 const closeModal = () => {
   if (bigItems.value?.size) bigItems.value.size = 'min';
-  isModal.value = false
-}
+  isModal.value = false;
+};
+
+const gridInventory = computed(() => {
+  const grid = [] as IitemsInventory[];
+
+  for (let i = 0; i < 25; i++) {
+    if (getItemsInventory.value[i]) {
+      grid.push(getItemsInventory.value[i]);
+    } else {
+      grid.push({
+        id: grid.reduce((max, el) => (el.id > max ? el.id : max), 0) + 1,
+        name: '',
+        amount: 0,
+        size: 'min',
+      });
+    }
+  }
+
+  return grid;
+});
 </script>
 
 <template>
   <div class="item_main inventory_grid">
     <div
       class="cell"
-      v-for="entity in getItemsInventory"
+      v-for="(entity, index) in gridInventory"
+      :index="index"
       :key="entity.id"
-      @click="inventoryStore.resizeItem(entity.id), isModal = true"
+      @click="inventoryStore.resizeItem(entity.id), (isModal = true)"
     >
       <ElementInventory :color="entity.name" size="min" v-if="entity.amount" />
       <div class="amount" v-if="entity.amount">
         <span>{{ entity.amount }}</span>
       </div>
     </div>
+
     <InnerModal
       :class="[closeOpenModal ? 'transform-open' : 'transform-close']"
       @close-modal="closeModal"
@@ -75,7 +94,7 @@ const closeModal = () => {
   position: relative;
   background-color: rgba(38, 38, 38);
   align-items: center;
-  justify-content: center;  
+  justify-content: center;
   cursor: pointer;
   &:first-child {
     border-radius: 12px 0 0 0;
