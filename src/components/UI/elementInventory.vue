@@ -2,8 +2,8 @@
 import { computed } from 'vue';
 
 const props = defineProps<{
-  color: 'green' | 'beige' | 'violet';
-  size: 'big' | 'min';
+  color?: string;
+  size: string;
 }>();
 
 const colorElement = computed(() => {
@@ -14,6 +14,8 @@ const colorElement = computed(() => {
       return 'entity__beige';
     case 'violet':
       return 'entity__violet';
+    case '':
+      return '';
   }
 });
 
@@ -22,14 +24,20 @@ const sizeElement = computed(() => {
     case 'big':
       return 'element__big';
     case 'min':
-      break
+      return '';
   }
 });
 </script>
 
 <template>
-  <div class="element entity_bottom" :class="`${colorElement}-bottom ${sizeElement}`"></div>
-  <div class="element entity_top" :class="`${colorElement}-top ${sizeElement}`"></div>
+  <div
+    class="element entity_bottom"
+    :class="`${colorElement}-bottom ${sizeElement}`"
+  ></div>
+  <div
+    class="element entity_top"
+    :class="`${colorElement}-top ${sizeElement}`"
+  ></div>
 </template>
 
 <style scoped lang="scss">
@@ -45,8 +53,8 @@ const sizeElement = computed(() => {
 }
 
 .element__big {
-    width: 116px !important;
-    height: 116px !important;
+  width: 116px !important;
+  height: 116px !important;
 }
 
 .element {

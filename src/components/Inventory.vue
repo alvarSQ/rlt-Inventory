@@ -1,54 +1,55 @@
 <script setup lang="ts">
 import InnerModal from '@/components/InnerModal.vue';
 import ElementInventory from './UI/elementInventory.vue';
+import { useInventoryStore } from '../stores/index';
+import { storeToRefs } from 'pinia';
+import { computed, ref } from 'vue';
+
+const inventoryStore = useInventoryStore();
+const { bigItems, getItemsInventory } = storeToRefs(useInventoryStore());
+
+
+
+const isModal = ref(true);
+
+const closeOpenModal = computed(() => {
+  return bigItems.value?.name && isModal.value ? true : false;
+});
+
+const closeModal = () => {
+  isModal.value = false
+}
 </script>
 
 <template>
   <div class="item_main inventory_grid">
-    <div class="cell">
-      <ElementInventory color="green" size="min" />
-      <div class="amount"><span>4</span></div>
+    <div
+      class="cell"
+      v-for="entity in getItemsInventory"
+      :key="entity.id"
+      @click="inventoryStore.resizeItem(entity.id), isModal = true"
+    >
+      <ElementInventory :color="entity.name" size="min" v-if="entity.amount" />
+      <div class="amount" v-if="entity.amount">
+        <span>{{ entity.amount }}</span>
+      </div>
     </div>
-    <div class="cell">
-      <ElementInventory color="beige" size="min" />
-      <div class="amount"><span>2</span></div>
-    </div>
-    <div class="cell">
-      <ElementInventory color="violet" size="min" />
-      <div class="amount"><span>5</span></div>
-    </div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <InnerModal class="transform" />
+    <InnerModal
+      :class="[closeOpenModal ? 'transform-open' : 'transform-close']"
+      @close-modal="closeModal"
+    />
   </div>
 </template>
 
 <style scoped lang="scss">
-.transform {
+.transform-open {
   transition: 0.6s;
-  &:hover {
-    transform: translate(100%);
-  }
+  transform: translate(0);
+}
+
+.transform-close {
+  transition: 0.6s;
+  transform: translate(100%);
 }
 
 .amount {
@@ -73,7 +74,8 @@ import ElementInventory from './UI/elementInventory.vue';
   position: relative;
   background-color: rgba(38, 38, 38);
   align-items: center;
-  justify-content: center;
+  justify-content: center;  
+  cursor: pointer;
   &:first-child {
     border-radius: 12px 0 0 0;
   }
