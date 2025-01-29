@@ -28,14 +28,23 @@ const startDragging = (e: DragEvent, entity: IitemsInventory) => {
 };
 
 const moveItemTo = (e: DragEvent, id: number) => {
+  const emptyElement: IitemsInventory = {
+    id: gridDrag.value.reduce((max, el) => (el.id > max ? el.id : max), 0) + 1,
+    name: '',
+    amount: 0,
+    size: 'min',
+  };
   if (e.dataTransfer) {
     const itemID = parseInt(e.dataTransfer.getData('itemID'));
-    const startItem = gridDrag.value.find((e) => e.id === itemID)
-    const endItem = gridDrag.value.find((e) => e.id === id)
+    const startItem = gridDrag.value.find((e) => e.id === itemID);
+    const endItem = gridDrag.value.find((e) => e.id === id);
     const startIndex = gridDrag.value.indexOf(startItem as IitemsInventory);
     const endIndex = gridDrag.value.indexOf(endItem as IitemsInventory);
 
     gridDrag.value.splice(startIndex, 1); // удаляем элемент со старого места
+    gridDrag.value.splice(startIndex, 0, emptyElement); // на старое место помещаем пустой объект
+
+    gridDrag.value.splice(endIndex, 1); // удаляем элемент c нового места
     gridDrag.value.splice(endIndex, 0, startItem as IitemsInventory); // переносим на новое
   }
 };
@@ -44,20 +53,21 @@ const moveItemTo = (e: DragEvent, id: number) => {
 <template>
   <div class="item_main inventory_grid">
     <div
-      class="cell"           
+      class="cell"
       @click="inventoryStore.resizeItem(entity.id), (isModal = true)"
       @dragstart="startDragging($event, entity)"
       @dragover.prevent
       @dragenter.prevent
       @drop="moveItemTo($event, entity.id)"
       draggable="true"
-      v-for="entity in gridDrag" 
+      v-for="entity in gridDrag"
       :key="entity.id"
     >
       <ElementInventory :color="entity.name" size="min" v-if="entity.amount" />
       <div class="amount" v-if="entity.amount">
         <span>{{ entity.amount }}</span>
       </div>
+      {{ entity.id }}
     </div>
 
     <InnerModal
