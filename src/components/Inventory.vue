@@ -6,7 +6,7 @@ import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
 
 const inventoryStore = useInventoryStore();
-const { bigItems, getItemsInventory } = storeToRefs(useInventoryStore());
+const { bigItems, gridDrag } = storeToRefs(useInventoryStore());
 
 const isModal = ref(true);
 
@@ -19,34 +19,40 @@ const closeModal = () => {
   isModal.value = false;
 };
 
-const gridInventory = computed(() => {
-  const grid = [] as IitemsInventory[];
-
-  for (let i = 0; i < 25; i++) {
-    if (getItemsInventory.value[i]) {
-      grid.push(getItemsInventory.value[i]);
-    } else {
-      grid.push({
-        id: grid.reduce((max, el) => (el.id > max ? el.id : max), 0) + 1,
-        name: '',
-        amount: 0,
-        size: 'min',
-      });
-    }
+const startDragging = (e: DragEvent, entity: IitemsInventory) => {
+  if (e.dataTransfer) {
+    e.dataTransfer.dropEffect = 'move';
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('itemID', entity.id.toString());
   }
+};
 
-  return grid;
-});
+const moveItemTo = (e: DragEvent, id: number) => {
+  if (e.dataTransfer) {
+    const itemID = parseInt(e.dataTransfer.getData('itemID'));
+    const startItem = gridDrag.value.find((e) => e.id === itemID)
+    const endItem = gridDrag.value.find((e) => e.id === id)
+    const startIndex = gridDrag.value.indexOf(startItem as IitemsInventory);
+    const endIndex = gridDrag.value.indexOf(endItem as IitemsInventory);
+
+    gridDrag.value.splice(startIndex, 1); // удаляем элемент со старого места
+    gridDrag.value.splice(endIndex, 0, startItem as IitemsInventory); // переносим на новое
+  }
+};
 </script>
 
 <template>
   <div class="item_main inventory_grid">
     <div
-      class="cell"
-      v-for="(entity, index) in gridInventory"
-      :index="index"
-      :key="entity.id"
+      class="cell"           
       @click="inventoryStore.resizeItem(entity.id), (isModal = true)"
+      @dragstart="startDragging($event, entity)"
+      @dragover.prevent
+      @dragenter.prevent
+      @drop="moveItemTo($event, entity.id)"
+      draggable="true"
+      v-for="entity in gridDrag" 
+      :key="entity.id"
     >
       <ElementInventory :color="entity.name" size="min" v-if="entity.amount" />
       <div class="amount" v-if="entity.amount">
@@ -55,7 +61,7 @@ const gridInventory = computed(() => {
     </div>
 
     <InnerModal
-      :class="[closeOpenModal ? 'transform-open' : 'transform-close']"
+      :class="closeOpenModal ? 'transform-open' : 'transform-close'"
       @close-modal="closeModal"
     />
   </div>

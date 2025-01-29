@@ -25,16 +25,31 @@ export const useInventoryStore = defineStore(
       },
     ] as IitemsInventory[]);
 
-    const getItemsInventory = computed(() => itemsInventory.value);
-
-    const bigItems = computed(() => {
-      return itemsInventory.value.find((e) => {
-        return e.size === 'big';
-      });
+    const gridInventory = computed(() => {
+      const grid = [] as IitemsInventory[];
+      for (let i = 0; i < 25; i++) {
+        if (itemsInventory.value[i]) {
+          grid.push(itemsInventory.value[i]);
+        } else {
+          grid.push({
+            id: grid.reduce((max, el) => (el.id > max ? el.id : max), 0) + 1,
+            name: '',
+            amount: 0,
+            size: 'min',
+          });
+        }
+      }
+      return grid;
     });
 
-    const resizeItem = (id: number) => {      
-      itemsInventory.value.forEach((e) => {
+    const gridDrag = ref(gridInventory.value as IitemsInventory[]);
+
+    const bigItems = computed(() => {
+      return gridDrag.value.find((e) => e.size === 'big');
+    });
+
+    const resizeItem = (id: number) => {
+      gridDrag.value.forEach((e) => {
         if (e.size === 'big') {
           e.size = 'min';
         }
@@ -45,11 +60,11 @@ export const useInventoryStore = defineStore(
       });
     };
 
-    return { getItemsInventory, bigItems, resizeItem, itemsInventory };
+    return { gridDrag, bigItems, resizeItem };
+  },
+  {
+    persist: {
+      pick: ['gridDrag'],
+    },
   }
-  // {
-  //   persist: {
-  //     pick: ['itemsInventory'],
-  //   },
-  // }
 );

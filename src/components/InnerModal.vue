@@ -14,7 +14,7 @@ const amountItem = ref(0);
 
 const toggleChoiceDelete = () => {
   if (bigItems.value?.amount) {
-    amountItem.value = bigItems.value?.amount;
+    amountItem.value = bigItems.value.amount;
   }
   isDelete.value = !isDelete.value;
 };
