@@ -17,6 +17,7 @@ const closeOpenModal = computed(() => {
 });
 
 const closeModal = () => {
+  if (bigItems.value?.size) bigItems.value.size = 'min';
   isModal.value = false
 }
 </script>
