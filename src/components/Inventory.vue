@@ -3,7 +3,7 @@ import InnerModal from '@/components/InnerModal.vue';
 import ElementInventory from './UI/elementInventory.vue';
 import { useInventoryStore } from '../stores/index';
 import { storeToRefs } from 'pinia';
-import { computed, defineComponent, onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 const inventoryStore = useInventoryStore();
 const { bigItems, gridDrag } = storeToRefs(useInventoryStore());
