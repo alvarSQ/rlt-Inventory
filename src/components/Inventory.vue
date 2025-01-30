@@ -23,7 +23,7 @@ const closeModal = () => {
 const loadImg = () => {
   const preloadImage = (src: string) => (new Image().src = src);
   gridDrag.value.forEach((el) =>
-   preloadImage(`/assets/${el.name}.png`)
+   preloadImage(`/${el.name}.png`)
   );
 };
 
