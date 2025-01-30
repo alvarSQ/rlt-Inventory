@@ -36,9 +36,11 @@ const startDragging = (e: DragEvent, entity: IitemsInventory) => {
     e.dataTransfer.dropEffect = 'move';
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('itemID', entity.id.toString());
+    if (entity.name) {
     const img = new Image();
     img.src = `/${entity.name}.png`;
-    e.dataTransfer.setDragImage(img, 25, 25);
+    e.dataTransfer.setDragImage(img, 32, 32);
+    }
   }
 };
 
