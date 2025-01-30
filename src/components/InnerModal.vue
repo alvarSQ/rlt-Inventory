@@ -22,6 +22,7 @@ const toggleChoiceDelete = () => {
 const delItem = () => {
   if (bigItems.value?.amount) {
     amountItem.value <= bigItems.value.amount ? bigItems.value.amount = bigItems.value.amount - amountItem.value : bigItems.value.amount = 0    
+    bigItems.value.name = ''
     bigItems.value.size = 'min'
   }  
   isDelete.value = !isDelete.value;
