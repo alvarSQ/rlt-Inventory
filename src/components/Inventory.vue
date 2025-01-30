@@ -22,9 +22,9 @@ const closeModal = () => {
 // для предварительной загрузки картинок при перетаскивании
 const loadImg = () => {
   const preloadImage = (src: string) => (new Image().src = src);
-  gridDrag.value.forEach((el) =>
-   preloadImage(`/${el.name}.png`)
-  );
+  gridDrag.value.forEach((el) => {
+    if (el.name) preloadImage(`/${el.name}.png`)
+  });
 };
 
 onMounted(() => {
