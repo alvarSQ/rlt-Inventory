@@ -3,7 +3,7 @@ import InnerModal from '@/components/InnerModal.vue';
 import ElementInventory from './UI/elementInventory.vue';
 import { useInventoryStore } from '../stores/index';
 import { storeToRefs } from 'pinia';
-import { computed, ref } from 'vue';
+import { computed, defineComponent, onMounted, ref } from 'vue';
 
 const inventoryStore = useInventoryStore();
 const { bigItems, gridDrag } = storeToRefs(useInventoryStore());
@@ -19,11 +19,25 @@ const closeModal = () => {
   isModal.value = false;
 };
 
-const startDragging = (e: DragEvent, entity: IitemsInventory) => {
+// для предварительной загрузки картинок при перетаскивании
+const loadImg = () => {
+  const preloadImage = (src: string) => (new Image().src = src);
+  gridDrag.value.forEach((el) => preloadImage(`/src/assets/img/${el.name}.png`))
+}
+
+onMounted(() => {
+  loadImg()
+})
+
+
+const startDragging = (e: DragEvent, entity: IitemsInventory) => {  
   if (e.dataTransfer) {
     e.dataTransfer.dropEffect = 'move';
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('itemID', entity.id.toString());
+    const img = new Image();
+    img.src = `/src/assets/img/${entity.name}.png`;
+    e.dataTransfer.setDragImage(img, 25, 25);
   }
 };
 
@@ -67,7 +81,6 @@ const moveItemTo = (e: DragEvent, id: number) => {
       <div class="amount" v-if="entity.amount">
         <span>{{ entity.amount }}</span>
       </div>
-      {{ entity.id }}
     </div>
 
     <InnerModal
