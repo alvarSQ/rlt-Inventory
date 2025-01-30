@@ -22,15 +22,16 @@ const closeModal = () => {
 // для предварительной загрузки картинок при перетаскивании
 const loadImg = () => {
   const preloadImage = (src: string) => (new Image().src = src);
-  gridDrag.value.forEach((el) => preloadImage(`/src/assets/img/${el.name}.png`))
-}
+  gridDrag.value.forEach((el) =>
+   preloadImage(`/src/assets/img/${el.name}.png`)
+  );
+};
 
 onMounted(() => {
-  loadImg()
-})
+  loadImg();
+});
 
-
-const startDragging = (e: DragEvent, entity: IitemsInventory) => {  
+const startDragging = (e: DragEvent, entity: IitemsInventory) => {
   if (e.dataTransfer) {
     e.dataTransfer.dropEffect = 'move';
     e.dataTransfer.effectAllowed = 'move';
@@ -55,11 +56,15 @@ const moveItemTo = (e: DragEvent, id: number) => {
     const startIndex = gridDrag.value.indexOf(startItem as IitemsInventory);
     const endIndex = gridDrag.value.indexOf(endItem as IitemsInventory);
 
-    gridDrag.value.splice(startIndex, 1); // удаляем элемент со старого места
-    gridDrag.value.splice(startIndex, 0, emptyElement); // на старое место помещаем пустой объект
+    if (endItem?.name) {
+      return;
+    } else {
+      gridDrag.value.splice(startIndex, 1); // удаляем элемент со старого места
+      gridDrag.value.splice(startIndex, 0, emptyElement); // на старое место помещаем пустой объект
 
-    gridDrag.value.splice(endIndex, 1); // удаляем элемент c нового места
-    gridDrag.value.splice(endIndex, 0, startItem as IitemsInventory); // переносим на новое
+      gridDrag.value.splice(endIndex, 1); // удаляем элемент c нового места
+      gridDrag.value.splice(endIndex, 0, startItem as IitemsInventory); // переносим на новое
+    }
   }
 };
 </script>
