@@ -78,7 +78,7 @@ const moveItemTo = (e: DragEvent, id: number) => {
       @dragover.prevent
       @dragenter.prevent
       @drop="moveItemTo($event, entity.id)"
-      draggable="true"
+      :draggable="entity.name !== ''"
       v-for="entity in gridDrag"
       :key="entity.id"
     >
